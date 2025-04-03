@@ -14,6 +14,7 @@ export const NavBar = () => {
     
     return (
         <>
+        
             <motion.nav 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -30,7 +31,7 @@ export const NavBar = () => {
                 ))}
             </motion.nav>
 
-                <Link href={""} className="text-white my-4 mx-4 flex justify-end  block lg:hidden" onClick={() => { setMenu(!menu) }}>
+                <Link href={""} className="text-white my-4 mx-4  justify-end  flex lg:hidden" onClick={() => { setMenu(!menu) }}>
                     {menu ? <X /> : <Menu />}
                 </Link>
 
