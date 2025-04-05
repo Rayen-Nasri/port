@@ -1,0 +1,140 @@
+"use client";
+import Image from "next/image";
+import play from "../../public/play.svg";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { IpadLoadingScreen } from "./BestPart/loadingSreen";
+
+export const Ipad = () => {
+    const [loading, setLoading] = useState(false);
+    
+    return (
+        <section className="mt-20 mb-20 space-y-4 relative overflow-hidden">
+            <h1 className="text-center text-white text-3xl md:text-5xl font-bold">
+                Feel free to test out some of <span className="text-[#8158C9] "> My Skills!</span>
+            </h1>
+            <p className="text-center text-white/78">
+                I invite you to try out a few of my products—feedback is welcome!
+            </p>
+
+            <br />
+            
+            <div className="absolute -z-10 w-full h-full top-0 left-0">
+                <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[100px] bg-purple-500/20 transition-all duration-700 ${loading ? 'opacity-80 scale-125' : 'opacity-30'}`}></div>
+                <div className={`absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full blur-[100px] bg-blue-500/20 transition-all duration-700 ${loading ? 'opacity-80 scale-125' : 'opacity-30'}`}></div>
+            </div>
+            
+            <div 
+                className="mr-10 max-w-full "
+            >
+                <motion.div 
+                    className="relative"
+                    style={{
+                        perspective: "1000px",
+                    }}
+
+                    transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 30
+                    }}
+                >
+                    <div className="border-[2px] border-white/10 bg-gradient-to-br from-black/80 to-black/60 backdrop-blur-xl rounded-[24px] h-[95vh] overflow-hidden shadow-[0_0_15px_rgba(129,88,201,0.3)] relative">
+                        <div className="flex gap-3 p-4 items-center backdrop-blur-md bg-black/30 border-b border-white/10">
+                            <div className="flex space-x-2">
+                                {Array(3).fill("").map((_, i) => (
+                                    <motion.div 
+                                        key={i} 
+                                        className="rounded-full w-[18px] h-[18px]"
+                                        style={{ backgroundColor: i === 0 ? "#ff5f57" : i === 1 ? "#febc2e" : "#28c840" }}
+                                        whileHover={{ scale: 1.2 }}
+                                    />
+                                ))}
+                            </div>
+                            
+                            <div className="flex-1 flex justify-center">
+                            </div>
+                            
+                            <motion.button 
+                                className="cursor-pointer flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#8158C9] to-[#5b3e91] shadow-lg" 
+                                onClick={() => { setLoading(!loading); }}
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <Image src={play} alt="play Button" width={20} height={20} />
+                            </motion.button>
+                        </div>
+                        
+                        <div className="relative h-[calc(100%-70px)]">
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none z-10"></div>
+                            
+                            {loading ? (
+                                <IpadLoadingScreen />
+                            ) : (
+                                <AnimatePresence>
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 20 }}
+                                        transition={{ duration: 0.5 }}
+                                        className="flex flex-col justify-center items-center h-full"
+                                    >
+                                        <motion.div 
+                                            className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500"
+                                            animate={{ 
+                                                textShadow: ["0 0 5px rgba(129,88,201,0.3)", "0 0 20px rgba(129,88,201,0.7)", "0 0 5px rgba(129,88,201,0.3)"] 
+                                            }}
+                                            transition={{ 
+                                                duration: 2, 
+                                                repeat: Infinity 
+                                            }}
+                                        >
+                                            Sleep Mode
+                                        </motion.div>
+                                        <p className="text-white/50 mt-4">Click the purple button to wake</p>
+                                        
+                                        <div className="absolute bottom-10 left-0 right-0 flex justify-center">
+                                            <motion.div 
+                                                className="w-20 h-1 bg-white/20 rounded-full"
+                                                animate={{ opacity: [0.2, 0.5, 0.2] }}
+                                                transition={{ duration: 2, repeat: Infinity }}
+                                            />
+                                        </div>
+                                    </motion.div>
+                                </AnimatePresence>
+                            )}
+                        </div>
+                    </div>
+                    
+                    <motion.div 
+                        className="absolute -right-10 top-1/4 w-20 h-20 rounded-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 blur-xl"
+                        animate={{
+                            y: [0, -20, 0],
+                            x: [0, 10, 0]
+                        }}
+                        transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                    ></motion.div>
+                    <motion.div 
+                        className="absolute -left-5 bottom-1/3 w-16 h-16 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-xl"
+                        animate={{
+                            y: [0, 20, 0],
+                            x: [0, -10, 0]
+                        }}
+                        transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                    ></motion.div>
+
+
+                    <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 w-[80%] h-[20px] bg-[#8158C9]/20 blur-xl rounded-full"></div>
+                </motion.div>
+            </div>
+        </section>
+    )
+}

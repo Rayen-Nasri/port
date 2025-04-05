@@ -3,7 +3,7 @@
 
 export const HomePage = () => {
     return (
-        <section className="text-white flex items-start h-screen lg:relative lg:bottom-20 2xl:bottom-0 z-0">
+        <section className="text-white flex items-start md:h-screen lg:relative lg:bottom-20 2xl:bottom-0 z-0">
             <div className="w-full lg:grid grid-cols-1 lg:grid-cols-2 ">
                 <div className="flex flex-col justify-center space-y-5 md:space-y-7 text-center lg:text-left px-4 lg:px-8">
                     <div className="animate-fadeIn">

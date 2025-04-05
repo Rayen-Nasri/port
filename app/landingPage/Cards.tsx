@@ -17,7 +17,7 @@ export const Cards = () => {
     const duplicatedStack = [...techStack, ...techStack];
 
     return (
-        <section >
+        <section>
 
             <Image
                 src={purp}
@@ -63,13 +63,13 @@ export const Cards = () => {
                             <p className='text-white/78'>
                                 i constantly try to improve
                             </p>
-                            <h1 className='text-3xl md:text-4xl 2xl:text-5xl'>
+                            <h1 className='text-3xl md:text-4xl font-bold  2xl:text-5xl'>
                                 My Tech Stack
                             </h1>
                         </div>
                         
-                        <div className='flex gap-4 md:gap-8 md:w-2/3 overflow-hidden'>
-                            <div className='relative h-[250px] md:h-[300px] overflow-hidden w-1/2'>
+                        <div className='flex gap-4 md:gap-8 md:w-2/3 overflow-hidden '>
+                            <div className='relative h-[250px] md:h-[380px] overflow-hidden w-1/2'>
                                 <motion.div
                                     initial={{ y: 0 }}
                                     animate={{ y: "-50%" }}
@@ -93,7 +93,7 @@ export const Cards = () => {
                                 </motion.div>
                             </div>
 
-                            <div className='relative h-[250px] md:h-[300px] overflow-hidden w-1/2'>
+                            <div className='relative h-[250px] md:h-[380px] overflow-hidden w-1/2'>
                                 <motion.div
                                     initial={{ y: "-50%" }}
                                     animate={{ y: "0" }}
