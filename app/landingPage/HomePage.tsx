@@ -19,7 +19,7 @@ export const HomePage = () => {
                     </div>
                     <div className="animate-fadeIn delay-200">
                         <p className="text-base md:text-lg text-gray-300 hover:text-white transition-colors duration-300">
-                            Hi! I'm Rayen, a passionate Full Stack Developer crafting digital solutions from Croatia. 🚀
+                            Hi! I'm Rayen, a passionate Full Stack Developer crafting digital solutions from Tunisia. 🚀
                         </p>
                     </div>
                 </div>

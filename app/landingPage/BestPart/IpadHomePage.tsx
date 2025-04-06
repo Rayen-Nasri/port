@@ -29,7 +29,7 @@ export const IpadHomePage = () => {
             </div>
 
             <section className="relative z-10 px-6 pt-10">
-                <div className="text-white space-y-8">
+                <div className="text-white space-y-5">
                     <motion.h1
                         className="text-7xl font-light tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent"
                         initial={{ y: -20 }}

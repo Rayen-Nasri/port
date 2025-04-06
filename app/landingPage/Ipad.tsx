@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import play from "../../public/play.svg";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IpadLoadingScreen } from "./BestPart/loadingSreen";
 
@@ -9,7 +9,7 @@ export const Ipad = () => {
     const [loading, setLoading] = useState(false);
     
     return (
-        <section className="mt-20 mb-20 space-y-4 relative overflow-hidden">
+        <section className="mt-20  space-y-4 relative ">
             <h1 className="text-center text-white text-3xl md:text-5xl font-bold">
                 Feel free to test out some of <span className="text-[#8158C9] "> My Skills!</span>
             </h1>

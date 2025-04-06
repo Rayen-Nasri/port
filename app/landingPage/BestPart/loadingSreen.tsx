@@ -26,7 +26,6 @@ export const IpadLoadingScreen = () => {
 
     return (
         <div className="relative overflow-hidden">
-            {/* Ambient background effects */}
             <div className="absolute inset-0">
                 <motion.div
                     className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-[100px]"
@@ -94,7 +93,6 @@ export const IpadLoadingScreen = () => {
                             </motion.svg>
                         </motion.div>
 
-                        {/* Modern loading bar */}
                         <div className="relative w-48">
                             <motion.div
                                 className="h-1 w-full bg-white/10 rounded-full overflow-hidden backdrop-blur-sm"
@@ -109,7 +107,6 @@ export const IpadLoadingScreen = () => {
                                 />
                             </motion.div>
                             
-                            {/* Loading text */}
                             <motion.p
                                 className="text-white/70 text-sm mt-4 text-center font-light"
                                 initial={{ opacity: 0 }}
