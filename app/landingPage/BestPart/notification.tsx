@@ -14,7 +14,7 @@ export const Notification = () => {
         <div className="relative">
 
             <motion.div
-                className="absolute  left-0 w-80 bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-4 shadow-xl z-10"
+                className="absolute  left-0 w-80 bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-4 shadow-xl "
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}

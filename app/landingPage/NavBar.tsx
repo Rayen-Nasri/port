@@ -18,7 +18,7 @@ export const NavBar = () => {
             <motion.nav 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="hidden lg:flex justify-center p-5 text-white rounded-full sm:mx-[15%] md:mx-[20%] lg:mx-[25%] xl:mx-[30%] backdrop-blur-sm bg-white/5"
+                className="hidden lg:flex justify-center p-5 text-white rounded-full sm:mx-[15%] lg:my-4 md:mx-[20%] lg:mx-[25%] xl:mx-[30%] backdrop-blur-sm bg-white/5"
             >
                 {navLinks.map((link, index) => (
                     <motion.div

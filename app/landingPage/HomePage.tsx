@@ -1,10 +1,11 @@
 "use client";
 
+import {motion} from "framer-motion";
 
 export const HomePage = () => {
     return (
-        <section className="text-white flex items-start md:h-screen lg:relative lg:bottom-20 2xl:bottom-0 z-0">
-            <div className="w-full lg:grid grid-cols-1 lg:grid-cols-2 ">
+        <section className="text-white flex items-start md:h-screen lg:relative lg:bottom-20 2xl:bottom-0 z-[900] ">
+            <div className="w-full md:grid grid-cols-1 lg:grid-cols-2 ">
                 <div className="flex flex-col justify-center space-y-5 md:space-y-7 text-center lg:text-left px-4 lg:px-8">
                     <div className="animate-fadeIn">
                         <p className="uppercase font-light tracking-wider text-[14px] md:text-[16px] text-gray-300">
@@ -13,8 +14,8 @@ export const HomePage = () => {
                     </div>
                     <div className="animate-slideUp">
                         <h1 className="text-[32px] md:text-[42px] lg:text-[52px] font-bold leading-tight  bg-clip-text text-white">
-                            Transforming Concepts into 
-                                Seamless <span className="text-[#8158C9] hover:text-purple-400 transition-colors duration-300">User Experiences</span>
+                            Transforming Concepts into
+                            Seamless <span className="text-[#8158C9] hover:text-purple-400 transition-colors duration-300">User Experiences</span>
                         </h1>
                     </div>
                     <div className="animate-fadeIn delay-200">
@@ -23,13 +24,16 @@ export const HomePage = () => {
                         </p>
                     </div>
                 </div>
-                <div className=" lg:block hidden items-start mt-8 lg:mt-0">
+                <motion.div
+                    initial
+                    className="relative hidden lg:block items-start mt-8 lg:mt-0"
+                >
                     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
-                    <div className="h-[400px] md:h-[500px] lg:h-[670px] w-full" dangerouslySetInnerHTML={{
+                    <div className="h-[670px] w-full" dangerouslySetInnerHTML={{
                         __html: '<spline-viewer url="https://prod.spline.design/gdAGhcuJi835JTZe/scene.splinecode"></spline-viewer>'
                     }}>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     )

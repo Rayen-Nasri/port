@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Notification } from './notification';
 import { Weather } from './weather';
-import { LowerBar } from './lowerBar';
+import { Application } from './application';
 
 export const IpadHomePage = () => {
     const [currentTime, setCurrentTime] = useState(new Date());
@@ -28,8 +28,8 @@ export const IpadHomePage = () => {
                 <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-blue-500/10 blur-[100px] animate-pulse delay-1000"></div>
             </div>
 
-            <section className="relative z-10 px-6 pt-10">
-                <div className="text-white space-y-5">
+            <section className="relative z-10 px-6 pt-10 lg:flex lg:gap-[100] ">
+                <div className="text-white space-y-5 lg:block hidden">
                     <motion.h1
                         className="text-7xl font-light tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent"
                         initial={{ y: -20 }}
@@ -101,14 +101,9 @@ export const IpadHomePage = () => {
                         </motion.div>
                     </AnimatePresence>
                 </div>
-                <motion.div
-                    initial={{ y: 50, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    className="fixed bottom-[2px] left-1/2 transform -translate-x-1/2"
-                >
-                    <LowerBar />
-                </motion.div>
+                <div >
+                    <Application/>
+                </div>
             </section>
 
         </motion.div>
