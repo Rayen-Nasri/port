@@ -3,7 +3,8 @@ import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { LoadingScreen } from './LoadingScreen';
 
-// UI components with optimized SSR
+
+
 const TracingBeam = dynamic(
     () => import("@/components/ui/tracing-beam").then(mod => mod.TracingBeam),
     { 
@@ -42,29 +43,29 @@ const Ipad = dynamic(() => import('./Ipad').then(mod => mod.Ipad), {
 
 export const LandingPage = () => {
     return (
-        <LoadingScreen>
-            <div className="absolute h-screen w-screen">
-                <Spotlight
-                    className="-top-40 left-0 md:-top-20 md:left-60"
-                    fill="white"
-                />
-            </div>
-            <div className="relative z-50 bg-transparent">
-                <Suspense fallback={<div className="h-16 bg-gradient-to-r from-gray-900 to-gray-800 animate-pulse" />}>
-                    <NavBar />
-                </Suspense>
-            </div>
-            <br />
+        // <LoadingScreen>
+        //     <div className="absolute h-screen w-screen">
+        //         <Spotlight
+        //             className="-top-40 left-0 md:-top-20 md:left-60"
+        //             fill="white"
+        //         />
+        //     </div>
+        //     <div className="relative z-50 bg-transparent">
+        //         <Suspense fallback={<div className="h-16 bg-gradient-to-r from-gray-900 to-gray-800 animate-pulse" />}>
+        //             <NavBar />
+        //         </Suspense>
+        //     </div>
+        //     <br />
 
-            <TracingBeam>
-                <div className="ml-20">
-                    <Suspense fallback={<div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 animate-pulse" />}>
-                        <HomePage />
-                        <Cards />
+        //     <TracingBeam>
+        //         <div className="ml-20">
+        //             <Suspense fallback={<div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 animate-pulse" />}>
+        //                 <HomePage />
+        //                 <Cards />
                         <Ipad />
-                    </Suspense>
-                </div>
-            </TracingBeam>
+            //         </Suspense>
+            //     </div>
+            // </TracingBeam>
         // </LoadingScreen>
     );
 };

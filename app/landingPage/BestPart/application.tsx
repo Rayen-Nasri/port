@@ -6,45 +6,51 @@ import setting from "../../../public/appleSetting.png"
 import Messages from "../../../public/Messages.png"
 import appStore from "../../../public/appStore.png"
 import photo from "../../../public/photo.png"
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import Game from '../FlappyBird/Game'
 import { useState } from "react"
+import { Messages as MessagesApp } from '../Applications/Messages'
+import { Notes } from '../Applications/Notes'
+import { AppStore } from '../Applications/AppStore'
+
+type AppName = 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | null;
 
 const applications = [
-    { src: setting, alt: "Settings", class: "rounded-2xl" },
     { src: Messages, alt: "Messages", class: "rounded-2xl" },
     { src: appStore, alt: "App Store", class: "rounded-2xl" },
-    { src: photo, alt: "Photos", class: "rounded-2xl" },
     { src: flappy, alt: "Flappy Bird", class: "rounded-2xl" },
     { src: note, alt: "Notes", class: "rounded-2xl" },
 ]
 
 export const Application = () => {
-    const [showFlappyBird, setShowFlappyBird] = useState(false);
+    const [activeApp, setActiveApp] = useState<AppName>(null);
 
-    const handleAppClick = (appName: string) => {
-        if (appName === "Flappy Bird") {
-            setShowFlappyBird(true);
-        }
+    const handleAppClick = (appName: AppName) => {
+        setActiveApp(appName);
     };
 
-    if (showFlappyBird) {
-        return (
-            <div className="fixed inset-0  bg-black ">
-                <button 
-                    onClick={() => setShowFlappyBird(false)}
-                    className="absolute top-4 right-4 z-50 bg-white/50 text-gray-700 px-4 py-2 rounded-lg hover:bg-white/10"
-                >
-                    Exit
-                </button>
-                <div className="flex items-center justify-center h-screen">
-                    <Game />
-                </div>
-            </div>
-        );
-    }
-
     return (
+        <>
+            <AnimatePresence mode="wait">
+                {activeApp === 'Messages' && <MessagesApp setActiveApp={setActiveApp} />}
+                {activeApp === 'App Store' && <AppStore setActiveApp={setActiveApp} />}
+                {activeApp === 'Notes' && <Notes  setActiveApp={setActiveApp}/>}
+                {activeApp === 'Flappy Bird' && (
+                    <div className="fixed inset-0 bg-black">
+                        <button 
+                            onClick={() => setActiveApp(null)}
+                            className="absolute top-4 right-4 z-50 bg-white/50 text-gray-700 px-4 py-2 rounded-lg hover:bg-white/10"
+                        >
+                            Exit
+                        </button>
+                        <div className="flex items-center justify-center h-screen">
+                            <Game />
+                        </div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {!activeApp && (
         <section className="py-8">
             <div className="grid grid-cols-3 md:grid-row-1 md:grid-cols-6 gap-6 place-items-center">
                 {applications.map((app, index) => (
@@ -60,7 +66,7 @@ export const Application = () => {
                         }}
                         whileHover={{ scale: 1.05, transition: { delay: 0 } }}
                         whileTap={{ scale: 0.95, transition: { delay: 0 } }}
-                        onClick={() => handleAppClick(app.alt)}
+                        onClick={() => handleAppClick(app.alt as AppName)}
                     >
                         <Image
                             src={app.src}
@@ -72,5 +78,7 @@ export const Application = () => {
                 ))}
             </div>
         </section>
+            )}
+        </>
     )
 }

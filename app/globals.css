@@ -1,5 +1,35 @@
 @import "tailwindcss";
-@import "tw-animate-css";
+
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --transition-duration: 0.3s;
+}
+
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  transition: background-color var(--transition-duration), color var(--transition-duration);
+}
+
+.disable-animations * {
+  transition: none !important;
+  animation: none !important;
+}
+
+button,
+a,
+input,
+textarea {
+  transition: all var(--transition-duration) ease-in-out;
+}
+
+*:focus-visible {
+  outline: 2px solid hsl(var(--foreground));
+  outline-offset: 2px;
+}
 
 @custom-variant dark (&:is(.dark *));
 
