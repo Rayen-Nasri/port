@@ -1,216 +1,313 @@
 "use client"
 
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
-import { FiPlus, FiX, FiTrash2 } from 'react-icons/fi'
+
+interface NotesProps {
+    setActiveApp: (app: 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | 'Password' | null) => void
+}
 
 interface Note {
     id: number
     title: string
     content: string
-    color: string
-    date: string
-}
-
-interface NotesProps {
-    setActiveApp: (app: 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | null) => void
+    timestamp: string
 }
 
 export const Notes = ({ setActiveApp }: NotesProps) => {
-    const [notes, setNotes] = useState<Note[]>([])
-    const [showNewNote, setShowNewNote] = useState(false)
-    const [newNote, setNewNote] = useState({ title: '', content: '' })
-
-    const colors = [
-        'bg-gradient-to-br from-purple-600/60 to-purple-800/60',
-        'bg-gradient-to-br from-blue-600/60 to-blue-800/60',
-        'bg-gradient-to-br from-pink-600/60 to-pink-800/60',
-        'bg-gradient-to-br from-indigo-600/60 to-indigo-800/60'
-    ]
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+    const [pendingAction, setPendingAction] = useState<'close' | 'new' | null>(null);
+    const [notes, setNotes] = useState<Note[]>(() => {
+        if (typeof window !== 'undefined') {
+            const savedNotes = localStorage.getItem('notes')
+            return savedNotes ? JSON.parse(savedNotes) : [
+                {
+                    id: 1,
+                    title: 'Welcome Note',
+                    content: 'Welcome to the Notes app! Create and manage your notes here.',
+                    timestamp: new Date().toLocaleDateString()
+                }
+            ]
+        }
+        return [{
+            id: 1,
+            title: 'Welcome Note',
+            content: 'Welcome to the Notes app! Create and manage your notes here.',
+            timestamp: new Date().toLocaleDateString()
+        }]
+    })
 
     useEffect(() => {
-        const savedNotes = localStorage.getItem('portfolioNotes')
-        if (savedNotes) {
-            setNotes(JSON.parse(savedNotes))
-        } else {
-            // Set default welcome note
-            const defaultNote = {
-                id: 1,
-                title: 'Welcome to My Portfolio',
-                content: 'Thanks for visiting! Feel free to explore my projects and experiences.',
-                color: 'bg-purple-600/50',
-                date: new Date().toLocaleDateString()
-            }
-            setNotes([defaultNote])
-            localStorage.setItem('portfolioNotes', JSON.stringify([defaultNote]))
-        }
-    }, [])
+        localStorage.setItem('notes', JSON.stringify(notes))
+    }, [notes])
+    const [selectedNote, setSelectedNote] = useState<Note | null>(null)
+    const [newNote, setNewNote] = useState({ title: '', content: '' })
 
-    const addNote = () => {
+    const hasUnsavedChanges = () => {
+        if (selectedNote) {
+            const originalNote = notes.find(n => n.id === selectedNote.id)
+            return originalNote?.title !== selectedNote.title || originalNote?.content !== selectedNote.content
+        }
+        return newNote.title.trim() !== '' || newNote.content.trim() !== ''
+    }
+
+    const handleClose = () => {
+        if (hasUnsavedChanges()) {
+            setPendingAction('close')
+            setShowConfirmDialog(true)
+        } else {
+            setActiveApp(null)
+        }
+    }
+
+    const handleNewNote = () => {
+        if (hasUnsavedChanges()) {
+            setPendingAction('new')
+            setShowConfirmDialog(true)
+        } else {
+            setSelectedNote(null)
+            setNewNote({ title: '', content: '' })
+        }
+    }
+
+    const createNote = () => {
         if (!newNote.title.trim() && !newNote.content.trim()) return
 
         const note: Note = {
-            id: Date.now(), // Use timestamp for unique ID
-            title: newNote.title || 'Untitled',
+            id: Date.now(),
+            title: newNote.title || 'Untitled Note',
             content: newNote.content,
-            color: colors[Math.floor(Math.random() * colors.length)],
-            date: new Date().toLocaleDateString()
+            timestamp: new Date().toLocaleDateString()
         }
 
-        const updatedNotes = [...notes, note]
-        setNotes(updatedNotes)
-        localStorage.setItem('portfolioNotes', JSON.stringify(updatedNotes))
+        setNotes([...notes, note])
         setNewNote({ title: '', content: '' })
-        setShowNewNote(false)
+        setSelectedNote(null)
     }
 
-    const deleteNote = (id: number) => {
-        const updatedNotes = notes.filter(note => note.id !== id)
+    const deleteNote = (noteId: number) => {
+        setNotes(notes.filter(note => note.id !== noteId))
+        if (selectedNote?.id === noteId) {
+            setSelectedNote(null)
+        }
+    }
+
+    const updateNote = () => {
+        if (!selectedNote) return
+        if (!selectedNote.title.trim() && !selectedNote.content.trim()) {
+            deleteNote(selectedNote.id)
+            return
+        }
+        
+        const updatedNotes = notes.map(note =>
+            note.id === selectedNote.id
+                ? {
+                    ...selectedNote,
+                    title: selectedNote.title.trim() || 'Untitled Note',
+                    timestamp: new Date().toLocaleDateString()
+                  }
+                : note
+        )
+        
         setNotes(updatedNotes)
-        localStorage.setItem('portfolioNotes', JSON.stringify(updatedNotes))
+        setSelectedNote(null)
     }
 
     return (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 z-40">
-            <motion.div
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+            <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="w-full max-w-4xl bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-6 backdrop-blur-lg relative shadow-xl border border-white/10"
+                className="w-full max-w-4xl bg-white/10 rounded-2xl overflow-hidden backdrop-blur-lg flex flex-col h-[80vh] shadow-2xl border border-white/5"
             >
-                <div className="flex justify-between items-center mb-8">
-                    <motion.h2 
-                        initial={{ x: -20, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        className="text-3xl font-bold text-white/90 bg-clip-text  bg-gradient-to-r from-white to-white/70"
-                    >
-                        Notes
-                    </motion.h2>
-
+                <div className="p-6 bg-white/5 border-b border-white/10 flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        <h2 className="text-2xl font-semibold text-white/90">Notes</h2>
+                    </div>
                     <div className="flex gap-3">
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => setShowNewNote(true)}
-                            className="bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl px-4 py-2 hover:from-purple-700 hover:to-purple-800 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-purple-900/20"
+                        <button
+                            onClick={handleNewNote}
+                            className="bg-white/10 text-white/90 p-2.5 rounded-xl hover:bg-white/20 transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-purple-500"
                         >
-                            <FiPlus className="h-4 w-4" />
-                            <span>New Note</span>
-                        </motion.button>
-                        <motion.button
-                            whileHover={{ scale: 1.05, rotate: 90 }}
-                            whileTap={{ scale: 0.95 }}
-                            transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                            onClick={() => setActiveApp(null)}
-                            className="bg-white/10 text-white/90 p-2 rounded-full hover:bg-white/20 transition-all duration-300 border border-white/10 shadow-lg"
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                        </button>
+                        <button
+                            onClick={handleClose}
+                            className="bg-white/10 text-white/90 p-2.5 rounded-xl hover:bg-white/20 transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-purple-500"
                         >
-                            <FiX className="h-6 w-6" />
-                        </motion.button>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {notes.map((note, index) => (
-                        <motion.div
-                            key={note.id}
-                            initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -30, scale: 0.9 }}
-                            transition={{ 
-                                duration: 0.3, 
-                                delay: index * 0.05,
-                                type: "spring",
-                                stiffness: 260,
-                                damping: 20
+                <div className="flex-1 flex">
+                    {/* Notes List */}
+                    <div className="w-1/3 border-r border-white/10 p-6 space-y-4 overflow-y-auto">
+                        <button
+                            onClick={() => {
+                                if (selectedNote || (newNote.title.trim() || newNote.content.trim())) {
+                                    createNote();
+                                }
+                                setSelectedNote(null);
+                                setNewNote({ title: '', content: '' });
                             }}
-                            whileHover={{ 
-                                y: -5, 
-                                scale: 1.02,
-                                transition: { duration: 0.2 }
-                            }}
-                            className={`${note.color} rounded-xl p-5 relative group shadow-lg backdrop-blur-sm border border-white/10`}
+                            className="w-full bg-purple-600 text-white rounded-xl px-6 py-3 hover:bg-purple-700 transition-all duration-200 hover:scale-[1.02] focus:ring-2 focus:ring-purple-500 font-medium shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2"
                         >
-                            <motion.button
-                                whileHover={{ scale: 1.2, rotate: 180 }}
-                                whileTap={{ scale: 0.9 }}
-                                onClick={() => deleteNote(note.id)}
-                                className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-200 bg-black/20 p-1.5 rounded-full hover:bg-black/40"
-                            >
-                                <FiTrash2 className="h-4 w-4 text-white/90" />
-                            </motion.button>
-                            <h3 className="text-xl font-bold text-white/95 mb-3">{note.title}</h3>
-                            <p className="text-white/80 text-sm mb-4 line-clamp-3">{note.content}</p>
-                            <p className="text-white/60 text-xs font-medium">{note.date}</p>
-                        </motion.div>
-                    ))}
-                </div>
-
-                <AnimatePresence>
-                    {showNewNote && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
-                            onClick={() => setShowNewNote(false)}
-                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            New Note
+                        </button>
+                        
+                        {notes.map((note) => (
                             <motion.div
-                                initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                                animate={{ scale: 1, opacity: 1, y: 0 }}
-                                exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                                className="bg-black/10 rounded-2xl p-6 w-full max-w-md backdrop-blur-lg shadow-xl border border-white/10"
-                                onClick={(e) => e.stopPropagation()}
+                                key={note.id}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                onClick={() => setSelectedNote(note)}
+                                className={`cursor-pointer p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] ${selectedNote?.id === note.id ? 'bg-white/20 shadow-lg ring-2 ring-purple-500/50 shadow-purple-500/20' : 'bg-white/5 hover:bg-white/10'}`}
                             >
-                                <div className="flex justify-between items-center mb-6">
-                                    <h3 className="text-2xl font-bold text-white/95">New Note</h3>
-                                    <motion.button
-                                        whileHover={{ scale: 1.1, rotate: 90 }}
-                                        whileTap={{ scale: 0.9 }}
-                                        onClick={() => setShowNewNote(false)}
-                                        className="text-white/70 hover:text-white/90 transition-colors"
+                                <div className="flex justify-between items-start gap-3">
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className="text-white/90 font-medium truncate text-lg">{note.title}</h3>
+                                        <p className="text-white/60 text-sm truncate mt-1">{note.content}</p>
+                                        <p className="text-white/40 text-xs mt-2 font-medium">{note.timestamp}</p>
+                                    </div>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            deleteNote(note.id);
+                                        }}
+                                        className="text-white/60 hover:text-red-400 transition-colors p-1 hover:bg-white/10 rounded-lg"
                                     >
-                                        <FiX className="h-5 w-5" />
-                                    </motion.button>
-                                </div>
-                                
-                                <input
-                                    type="text"
-                                    placeholder="Title"
-                                    value={newNote.title}
-                                    onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
-                                    className="w-full bg-white/10 rounded-xl px-4 py-3 text-white/90 placeholder-white/50 mb-4 focus:outline-none focus:ring-2 focus:ring-purple-500 border border-white/10 shadow-inner"
-                                />
-                                <textarea
-                                    placeholder="Content"
-                                    value={newNote.content}
-                                    onChange={(e) => setNewNote({ ...newNote, content: e.target.value })}
-                                    className="w-full bg-white/10 rounded-xl px-4 py-3 text-white/90 placeholder-white/50 mb-6 h-40 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 border border-white/10 shadow-inner"
-                                />
-                                <div className="flex space-x-3">
-                                    <motion.button
-                                        whileHover={{ scale: 1.03 }}
-                                        whileTap={{ scale: 0.97 }}
-                                        onClick={addNote}
-                                        className="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl px-4 py-3 hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium shadow-lg shadow-purple-900/20"
-                                    >
-                                        Add Note
-                                    </motion.button>
-                                    <motion.button
-                                        whileHover={{ scale: 1.03 }}
-                                        whileTap={{ scale: 0.97 }}
-                                        onClick={() => setShowNewNote(false)}
-                                        className="flex-1 bg-white/10 text-white/90 rounded-xl px-4 py-3 hover:bg-white/20 transition-all duration-300 border border-white/10"
-                                    >
-                                        Cancel
-                                    </motion.button>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </motion.div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                        ))}
+                    </div>
+
+                    {/* Note Editor */}
+                    <div className="flex-1 p-6">
+                        <div className="space-y-4">
+                            <input
+                                type="text"
+                                value={selectedNote ? selectedNote.title : newNote.title}
+                                onChange={(e) => selectedNote 
+                                    ? setSelectedNote({ ...selectedNote, title: e.target.value })
+                                    : setNewNote({ ...newNote, title: e.target.value })
+                                }
+                                placeholder="Enter note title..."
+                                className="w-full bg-white/5 rounded-xl px-6 py-3 text-white/90 placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500 text-lg font-medium transition-all duration-200 hover:bg-white/10"
+                            />
+                            <textarea
+                                value={selectedNote ? selectedNote.content : newNote.content}
+                                onChange={(e) => selectedNote
+                                    ? setSelectedNote({ ...selectedNote, content: e.target.value })
+                                    : setNewNote({ ...newNote, content: e.target.value })
+                                }
+                                placeholder="Start writing your note here..."
+                                className="w-full h-[calc(100vh-380px)] bg-white/5 rounded-xl px-6 py-4 text-white/90 placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none text-base transition-all duration-200 hover:bg-white/10"
+                            />
+                            {selectedNote ? (
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={updateNote}
+                                        className="flex-1 bg-gradient-to-r from-purple-600 to-purple-800 text-white rounded-xl px-6 py-3 hover:from-purple-700 hover:to-purple-900 transition-all duration-200 hover:scale-[1.02] focus:ring-2 focus:ring-purple-500 font-medium shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2 relative overflow-hidden group"
+                                    >
+                                        <div className="absolute inset-0 bg-white/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span className="relative z-10">Update Note</span>
+                                    </button>
+                                    <button
+                                        onClick={() => setSelectedNote(null)}
+                                        className="flex-1 bg-white/10 text-white/90 rounded-xl px-6 py-3 hover:bg-white/20 transition-all duration-200 hover:scale-[1.02] focus:ring-2 focus:ring-purple-500 font-medium shadow-lg flex items-center justify-center gap-2"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={createNote}
+                                    className="w-full bg-purple-600 text-white rounded-xl px-6 py-3 hover:bg-purple-700 transition-all duration-200 hover:scale-[1.02] focus:ring-2 focus:ring-purple-500 font-medium shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Save Note
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
             </motion.div>
+            {showConfirmDialog && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-white/10 max-w-md w-full"
+                    >
+                        <h3 className="text-xl font-semibold text-white/90 mb-4">Unsaved Changes</h3>
+                        <p className="text-white/70 mb-6">You have unsaved changes. Would you like to save them before leaving?</p>
+                        <div className="flex gap-4">
+                            <button
+                                onClick={() => {
+                                    if (selectedNote) {
+                                        updateNote()
+                                    } else {
+                                        createNote()
+                                    }
+                                    setShowConfirmDialog(false)
+                                    if (pendingAction === 'close') setActiveApp(null)
+                                    if (pendingAction === 'new') {
+                                        setSelectedNote(null)
+                                        setNewNote({ title: '', content: '' })
+                                    }
+                                }}
+                                className="flex-1 bg-purple-600 text-white rounded-xl px-4 py-2 hover:bg-purple-700 transition-all duration-200"
+                            >
+                                Save
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setShowConfirmDialog(false)
+                                    if (pendingAction === 'close') setActiveApp(null)
+                                    if (pendingAction === 'new') {
+                                        setSelectedNote(null)
+                                        setNewNote({ title: '', content: '' })
+                                    }
+                                }}
+                                className="flex-1 bg-white/10 text-white/90 rounded-xl px-4 py-2 hover:bg-white/20 transition-all duration-200"
+                            >
+                                Don't Save
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setShowConfirmDialog(false)
+                                    setPendingAction(null)
+                                }}
+                                className="flex-1 bg-white/10 text-white/90 rounded-xl px-4 py-2 hover:bg-white/20 transition-all duration-200"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
         </div>
     )
 }

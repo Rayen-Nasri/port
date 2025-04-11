@@ -108,7 +108,7 @@ const initialApps: App[] = [
 ]
 
 interface AppStoreProps {
-    setActiveApp: (app: 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | null) => void
+    setActiveApp: (app: 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | 'Password' | null) => void
 }
 
 

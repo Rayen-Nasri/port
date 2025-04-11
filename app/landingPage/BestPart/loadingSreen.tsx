@@ -1,14 +1,22 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { IpadHomePage } from './IpadHomePage';
 import styled from 'styled-components';
-import { div } from 'framer-motion/client';
+import { PasswordValidation } from './PasswordValidation';
 
 export const IpadLoadingScreen = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
+  const [existPass, setExistPass] = useState(false);
+  const [passwordValidated, setPasswordValidated] = useState(false);
 
   useEffect(() => {
+    // Check if password exists in localStorage
+    if (typeof window !== 'undefined') {
+      if (localStorage.getItem("hasPassword") === "true") {
+        setExistPass(true);
+      }
+    }
+    
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -17,6 +25,10 @@ export const IpadLoadingScreen = ({ children }: { children: React.ReactNode }) =
       clearTimeout(timer);
     };
   }, []);
+  
+  const handlePasswordSuccess = () => {
+    setPasswordValidated(true);
+  };
 
   return (
     <div className="relative ">
@@ -56,15 +68,25 @@ export const IpadLoadingScreen = ({ children }: { children: React.ReactNode }) =
           </StyledWrapper>
 
         ) : (
-          <div>
-            {children}
-          </div>
+          existPass ? (
+            passwordValidated ? (
+              <div>
+                {children}
+              </div>
+            ) : (
+              <PasswordValidation 
+                onSuccess={handlePasswordSuccess} 
+                isNewPassword={false} 
+              />
+            )
+          ) : (
+            <div>{children}</div>
+          )
         )}
       </AnimatePresence>
     </div>
   );
 };
-
 
 
 

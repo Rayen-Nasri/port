@@ -1,68 +1,75 @@
 "use client";
+
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import styles from './LandingPage.module.css';
 import styled from 'styled-components';
 
 interface LoadingScreenProps {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export const LoadingScreen = ({ children }: LoadingScreenProps) => {
-    const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 6000);
+  // const splineViewer = `
+  //     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
+  //     <spline-viewer url="https://prod.spline.design/gdAGhcuJi835JTZe/scene.splinecode"></spline-viewer>
+  // `;
 
-        return () => clearTimeout(timer);
-    }, []);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+      // return () => {
+      //   const script = document.createElement('script');
+      //   script.type = 'module';
+      //   script.innerHTML = splineViewer;
+      //   document.body.appendChild(script);
+      // }
+    }, 6000);
 
-    const splineViewer = `
-        <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
-        <spline-viewer url="https://prod.spline.design/gdAGhcuJi835JTZe/scene.splinecode"></spline-viewer>
-    `;
+    return () => clearTimeout(timer);
+  }, []);
 
-    return (
-        <>
-            {loading && (
-                <div className="hidden" dangerouslySetInnerHTML={{ __html: splineViewer }} />
-            )}
 
-            <AnimatePresence mode="wait">
-                {loading ? (
-                    <StyledWrapper>
-                        <div>
-                            <div className="container">
-                                <div className="dot dot-1" />
-                                <div className="dot dot-2" />
-                                <div className="dot dot-3" />
-                            </div>
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <filter id="goo">
-                                        <feGaussianBlur result="blur" stdDeviation={10} in="SourceGraphic" />
-                                        <feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 21 -7" mode="matrix" in="blur" />
-                                    </filter>
-                                </defs>
-                            </svg>
-                        </div>
-                    </StyledWrapper>
-                ) : (
-                    <motion.div
-                        key="content"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                        className="relative"
-                    >
-                        {children}
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </>
-    );
+  return (
+    <>
+      {/* {loading && (
+        <div className="hidden" dangerouslySetInnerHTML={{ __html: splineViewer }} />
+      )} */}
+
+      <AnimatePresence mode="wait">
+        {loading ? (
+          <StyledWrapper>
+            <div>
+              <div className="container">
+                <div className="dot dot-1" />
+                <div className="dot dot-2" />
+                <div className="dot dot-3" />
+              </div>
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <filter id="goo">
+                    <feGaussianBlur result="blur" stdDeviation={10} in="SourceGraphic" />
+                    <feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 21 -7" mode="matrix" in="blur" />
+                  </filter>
+                </defs>
+              </svg>
+            </div>
+          </StyledWrapper>
+        ) : (
+          <motion.div
+            key="content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="relative"
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
 };
 
 const StyledWrapper = styled.div`

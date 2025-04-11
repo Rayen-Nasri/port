@@ -13,7 +13,7 @@ interface Message {
 }
 
 interface MessagesProps {
-    setActiveApp: (app: 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | null) => void
+    setActiveApp: (app: 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | 'Password' | null) => void
 }
 
 export const Messages = ({ setActiveApp }: MessagesProps) => {

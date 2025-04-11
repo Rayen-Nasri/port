@@ -2,24 +2,25 @@
 import Image from "next/image"
 import flappy from "../../../public/flappy.png"
 import note from "../../../public/note.png"
-import setting from "../../../public/appleSetting.png"
+import password from "../../../public/password.png"
 import Messages from "../../../public/Messages.png"
 import appStore from "../../../public/appStore.png"
-import photo from "../../../public/photo.png"
 import { motion, AnimatePresence } from 'framer-motion'
 import Game from '../FlappyBird/Game'
 import { useState } from "react"
 import { Messages as MessagesApp } from '../Applications/Messages'
 import { Notes } from '../Applications/Notes'
 import { AppStore } from '../Applications/AppStore'
+import { Password } from "../Applications/password"
 
-type AppName = 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | null;
+type AppName = 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | 'Password'| null;
 
 const applications = [
     { src: Messages, alt: "Messages", class: "rounded-2xl" },
     { src: appStore, alt: "App Store", class: "rounded-2xl" },
     { src: flappy, alt: "Flappy Bird", class: "rounded-2xl" },
     { src: note, alt: "Notes", class: "rounded-2xl" },
+    { src: password, alt: "Password", class: "rounded-2xl" }
 ]
 
 export const Application = () => {
@@ -35,6 +36,7 @@ export const Application = () => {
                 {activeApp === 'Messages' && <MessagesApp setActiveApp={setActiveApp} />}
                 {activeApp === 'App Store' && <AppStore setActiveApp={setActiveApp} />}
                 {activeApp === 'Notes' && <Notes  setActiveApp={setActiveApp}/>}
+                {activeApp === 'Password' && <Password  setActiveApp={setActiveApp}/>}
                 {activeApp === 'Flappy Bird' && (
                     <div className="fixed inset-0 bg-black">
                         <button 
