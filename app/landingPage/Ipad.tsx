@@ -1,15 +1,13 @@
 "use client";
 import Image from "next/image";
 import play from "../../public/play.svg";
-import { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IpadLoadingScreen } from "./BestPart/loadingSreen";
 import { IpadHomePage } from "./BestPart/IpadHomePage";
 
-export const Ipad = () => {
+export const Ipad = memo(() => {
     const [loading, setLoading] = useState(false);
-    const toggleLoading = useCallback(() => setLoading(prev => !prev), []);
-
     return (
         <section className="mt-20  space-y-4 relative ">
             <h1 className="text-center text-white text-3xl md:text-5xl font-bold">
@@ -27,7 +25,7 @@ export const Ipad = () => {
             </div>
 
             <div
-                className="mr-10 max-w-full "
+                className=" max-w-full "
             >
                 <motion.div
                     className="relative"
@@ -133,4 +131,4 @@ export const Ipad = () => {
             </div>
         </section>
     )
-}
+})

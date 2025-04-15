@@ -11,31 +11,18 @@ interface LoadingScreenProps {
 export const LoadingScreen = ({ children }: LoadingScreenProps) => {
   const [loading, setLoading] = useState(true);
 
-  // const splineViewer = `
-  //     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
-  //     <spline-viewer url="https://prod.spline.design/gdAGhcuJi835JTZe/scene.splinecode"></spline-viewer>
-  // `;
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-      // return () => {
-      //   const script = document.createElement('script');
-      //   script.type = 'module';
-      //   script.innerHTML = splineViewer;
-      //   document.body.appendChild(script);
-      // }
     }, 6000);
 
     return () => clearTimeout(timer);
   }, []);
 
-
   return (
     <>
-      {/* {loading && (
-        <div className="hidden" dangerouslySetInnerHTML={{ __html: splineViewer }} />
-      )} */}
+
 
       <AnimatePresence mode="wait">
         {loading ? (

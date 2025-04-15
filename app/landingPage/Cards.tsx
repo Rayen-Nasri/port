@@ -2,7 +2,6 @@
 import Image from 'next/image'
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { useEffect, useRef, useMemo, memo } from 'react';
-import purp from '../../public/purp.png'
 import card1 from '../../public/card1.png'
 import card2 from '../../public/card2.png'
 import card3 from '../../public/card3.svg'
@@ -104,18 +103,12 @@ export const Cards = memo(() => {
 
     return (
         <section ref={ref}>
-            <Image
-                src={purp}
-                alt='Purple gradient'
-                className='absolute bottom-0.5 right-0 z-0'
-                priority
-            />
 
             <motion.div
                 variants={variants.container}
                 initial="hidden"
                 animate={controls}
-                className="flex flex-col gap-6 lg:grid lg:grid-cols-3 lg:grid-rows-4 text-white mr-10 xl:mx-20 2xl:mx-30 relative z-10">
+                className="flex flex-col gap-6 lg:grid lg:grid-cols-3 lg:grid-rows-4 text-white xl:mx-20 2xl:mx-30 relative z-10">
 
                 <motion.div
                     variants={variants.card}

@@ -262,7 +262,6 @@ button{
 
 
 .bgtrans{
-  background: #131313;
   animation:  bgTT 10s ;
 }
 @keyframes bgTT {
