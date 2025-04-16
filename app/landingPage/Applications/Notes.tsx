@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 
 interface NotesProps {
-    setActiveApp: (app: 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | 'Password' | null) => void
+    setActiveApp: (app: 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | 'Password' | 'Wallpaper' | null) => void
 }
 
 interface Note {
@@ -98,59 +98,59 @@ export const Notes = ({ setActiveApp }: NotesProps) => {
             deleteNote(selectedNote.id)
             return
         }
-        
+
         const updatedNotes = notes.map(note =>
             note.id === selectedNote.id
                 ? {
                     ...selectedNote,
                     title: selectedNote.title.trim() || 'Untitled Note',
                     timestamp: new Date().toLocaleDateString()
-                  }
+                }
                 : note
         )
-        
+
         setNotes(updatedNotes)
         setSelectedNote(null)
     }
 
     return (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-            <motion.div 
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
+            <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="w-full max-w-4xl bg-white/10 rounded-2xl overflow-hidden backdrop-blur-lg flex flex-col h-[80vh] shadow-2xl border border-white/5"
+                className=" w-[90%] md:max-w-4xl bg-white/10 rounded-2xl overflow-hidden backdrop-blur-lg flex flex-col h-[90vh] sm:h-[80vh] shadow-2xl border border-white/5"
             >
-                <div className="p-6 bg-white/5 border-b border-white/10 flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="p-4 sm:p-6 bg-white/5 border-b border-white/10 flex justify-between items-center">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
-                        <h2 className="text-2xl font-semibold text-white/90">Notes</h2>
+                        <h2 className="text-xl sm:text-2xl font-semibold text-white/90">Notes</h2>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex gap-2 sm:gap-3">
                         <button
                             onClick={handleNewNote}
-                            className="bg-white/10 text-white/90 p-2.5 rounded-xl hover:bg-white/20 transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-purple-500"
+                            className="bg-white/10 text-white/90 p-2 sm:p-2.5 rounded-xl hover:bg-white/20 transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-purple-500"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
                         </button>
                         <button
                             onClick={handleClose}
-                            className="bg-white/10 text-white/90 p-2.5 rounded-xl hover:bg-white/20 transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-purple-500"
+                            className="bg-white/10 text-white/90 p-2 sm:p-2.5 rounded-xl hover:bg-white/20 transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-purple-500"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
                 </div>
 
-                <div className="flex-1 flex">
+                <div className="flex-1 flex flex-col lg:flex-row">
                     {/* Notes List */}
-                    <div className="w-1/3 border-r border-white/10 p-6 space-y-4 overflow-y-auto">
+                    <div className="w-full lg:w-1/3 border-b lg:border-b-0 lg:border-r border-white/10 p-4 sm:p-6 space-y-3 sm:space-y-4 overflow-y-auto max-h-[30vh] lg:max-h-full">
                         <button
                             onClick={() => {
                                 if (selectedNote || (newNote.title.trim() || newNote.content.trim())) {
@@ -159,14 +159,14 @@ export const Notes = ({ setActiveApp }: NotesProps) => {
                                 setSelectedNote(null);
                                 setNewNote({ title: '', content: '' });
                             }}
-                            className="w-full bg-purple-600 text-white rounded-xl px-6 py-3 hover:bg-purple-700 transition-all duration-200 hover:scale-[1.02] focus:ring-2 focus:ring-purple-500 font-medium shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2"
+                            className="w-full bg-purple-600 text-white rounded-xl px-4 sm:px-6 py-2 sm:py-3 hover:bg-purple-700 transition-all duration-200 hover:scale-[1.02] focus:ring-2 focus:ring-purple-500 font-medium shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2 text-sm sm:text-base"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
                             New Note
                         </button>
-                        
+
                         {notes.map((note) => (
                             <motion.div
                                 key={note.id}
@@ -198,17 +198,17 @@ export const Notes = ({ setActiveApp }: NotesProps) => {
                     </div>
 
                     {/* Note Editor */}
-                    <div className="flex-1 p-6">
-                        <div className="space-y-4">
+                    <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
+                        <div className="space-y-3 sm:space-y-4">
                             <input
                                 type="text"
                                 value={selectedNote ? selectedNote.title : newNote.title}
-                                onChange={(e) => selectedNote 
+                                onChange={(e) => selectedNote
                                     ? setSelectedNote({ ...selectedNote, title: e.target.value })
                                     : setNewNote({ ...newNote, title: e.target.value })
                                 }
                                 placeholder="Enter note title..."
-                                className="w-full bg-white/5 rounded-xl px-6 py-3 text-white/90 placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500 text-lg font-medium transition-all duration-200 hover:bg-white/10"
+                                className="w-full bg-white/5 rounded-xl px-4 sm:px-6 py-2 sm:py-3 text-white/90 placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500 text-base sm:text-lg font-medium transition-all duration-200 hover:bg-white/10"
                             />
                             <textarea
                                 value={selectedNote ? selectedNote.content : newNote.content}
@@ -217,7 +217,7 @@ export const Notes = ({ setActiveApp }: NotesProps) => {
                                     : setNewNote({ ...newNote, content: e.target.value })
                                 }
                                 placeholder="Start writing your note here..."
-                                className="w-full h-[calc(100vh-380px)] bg-white/5 rounded-xl px-6 py-4 text-white/90 placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none text-base transition-all duration-200 hover:bg-white/10"
+                                className="w-full h-[calc(94vh-500px)] lg:h-[calc(90vh-380px)] bg-white/5 rounded-xl px-4 sm:px-6 py-3 sm:py-4 text-white/90 placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none text-sm sm:text-base transition-all duration-200 hover:bg-white/10"
                             />
                             {selectedNote ? (
                                 <div className="flex gap-4">
@@ -233,7 +233,7 @@ export const Notes = ({ setActiveApp }: NotesProps) => {
                                     </button>
                                     <button
                                         onClick={() => setSelectedNote(null)}
-                                        className="flex-1 bg-white/10 text-white/90 rounded-xl px-6 py-3 hover:bg-white/20 transition-all duration-200 hover:scale-[1.02] focus:ring-2 focus:ring-purple-500 font-medium shadow-lg flex items-center justify-center gap-2"
+                                        className="flex-1 bg-white/10 text-white/90 rounded-xl px-6 hover:bg-white/20 transition-all duration-200 hover:scale-[1.02] focus:ring-2 focus:ring-purple-500 font-medium shadow-lg flex items-center justify-center gap-2"
                                     >
                                         Cancel
                                     </button>
@@ -241,7 +241,7 @@ export const Notes = ({ setActiveApp }: NotesProps) => {
                             ) : (
                                 <button
                                     onClick={createNote}
-                                    className="w-full bg-purple-600 text-white rounded-xl px-6 py-3 hover:bg-purple-700 transition-all duration-200 hover:scale-[1.02] focus:ring-2 focus:ring-purple-500 font-medium shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2"
+                                    className="w-full bg-purple-600 text-white rounded-xl py-2 px-6 hover:bg-purple-700 transition-all duration-200 hover:scale-[1.02] focus:ring-2 focus:ring-purple-500 font-medium shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

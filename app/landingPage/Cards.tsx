@@ -12,7 +12,7 @@ const variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
-            transition: { staggerChildren: 0.15, delayChildren: 0.1, when: "beforeChildren", ease: "easeOut" }
+            transition: { staggerChildren: 0.15, delayChildren: 0.1 }
         }
     },
     card: {
@@ -44,7 +44,7 @@ const variants = {
 const TechStackColumn = memo(({ columnIndex, techStack }: { columnIndex: number, techStack: string[] }) => (
     <div className='relative h-[250px] md:h-[380px] overflow-hidden w-1/2'>
         <motion.div
-            className="absolute inset-0 z-10 pointer-events-none"
+            className="absolute inset-0 z-10 "
             style={{ 
                 background: 'linear-gradient(to bottom, rgba(15,15,15,0.95) 0%, rgba(15,15,15,0) 15%, rgba(15,15,15,0) 85%, rgba(15,15,15,0.95) 100%)'
             }}
@@ -77,7 +77,7 @@ export const Cards = memo(() => {
         "Tailwind", "JavaScript", "Angular", "Bootstrap", "nodejs"
     ], []);
 
-    const duplicatedStack = useMemo(() => [...techStack, ...techStack], [techStack]);
+    const duplicatedStack = [...techStack, ...techStack]
 
     const controls = useAnimation();
     const ref = useRef(null);
@@ -107,7 +107,8 @@ export const Cards = memo(() => {
             <motion.div
                 variants={variants.container}
                 initial="hidden"
-                animate={controls}
+                whileInView="visible"
+                viewport={{ once: true}}
                 className="flex flex-col gap-6 lg:grid lg:grid-cols-3 lg:grid-rows-4 text-white xl:mx-20 2xl:mx-30 relative z-10">
 
                 <motion.div

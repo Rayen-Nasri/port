@@ -12,6 +12,11 @@ const TracingBeam = dynamic(
     }
 );
 
+const LoadingScreen = dynamic(
+    ()=> import("./LoadingScreen").then(mod => mod.LoadingScreen) , {
+        ssr : false
+    }
+)
 const Spotlight = dynamic(
     () => import("@/components/ui/spotlight-new").then(mod => mod.Spotlight)
 );
@@ -57,6 +62,7 @@ export const LandingPage = () => {
                     <div className="ml-20 mr-10">
                         <HomePage />
                         <Cards />
+                        <br />
                         <Ipad />
                         <SkillsShowcase />
                         <Footer />

@@ -1,23 +1,19 @@
 "use client";
 import Image from "next/image";
 import play from "../../public/play.svg";
-import { memo, useCallback, useState } from "react";
+import { memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IpadLoadingScreen } from "./BestPart/loadingSreen";
 import { IpadHomePage } from "./BestPart/IpadHomePage";
 
 export const Ipad = memo(() => {
     const [loading, setLoading] = useState(false);
-    return (
-        <section className="mt-20  space-y-4 relative ">
-            <h1 className="text-center text-white text-3xl md:text-5xl font-bold">
-                Feel free to test out some of <span className="text-[#8158C9] "> My Skills!</span>
-            </h1>
-            <p className="text-center text-white/78">
-                I invite you to try out a few of my products—feedback is welcome!
-            </p>
 
-            <br />
+    return (
+        <motion.section
+            whileInView="visible"
+            viewport={{ once: true }}
+            className=" mt-20  space-y-4 relative  bgtrans ">
 
             <div className="absolute -z-10 w-full h-full top-0 left-0">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[75px] bg-purple-500/20 opacity-30 transition-all duration-700 data-[loading=true]:opacity-80 data-[loading=true]:scale-125" data-loading={loading}></div>
@@ -25,7 +21,7 @@ export const Ipad = memo(() => {
             </div>
 
             <div
-                className=" max-w-full "
+                className="mx-3 sm:mx-10  max-w-full bgtrans"
             >
                 <motion.div
                     className="relative"
@@ -129,6 +125,6 @@ export const Ipad = memo(() => {
                     <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 w-[80%] h-[20px] bg-[#8158C9]/20 blur-xl rounded-full"></div>
                 </motion.div>
             </div>
-        </section>
+        </motion.section>
     )
 })

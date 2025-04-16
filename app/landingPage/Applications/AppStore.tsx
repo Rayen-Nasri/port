@@ -108,7 +108,7 @@ const initialApps: App[] = [
 ]
 
 interface AppStoreProps {
-    setActiveApp: (app: 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | 'Password' | null) => void
+    setActiveApp: (app: 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | 'Password' | 'Wallpaper' | null) => void
 }
 
 
@@ -119,8 +119,7 @@ const AppCard = memo(({ app, onInstall, onSelect, isInstalling }: {
     isInstalling: number | null
 }) => {
     return (
-        <motion.div
-            layoutId={`app-card-${app.id}`}
+        <div
             className="bg-gradient-to-br from-white/10 to-white/5 rounded-xl p-4 hover:from-white/15 hover:to-white/10 transition-all duration-200 border border-white/10 shadow-lg "
             onClick={() => onSelect(app)}
         >
@@ -176,21 +175,13 @@ const AppCard = memo(({ app, onInstall, onSelect, isInstalling }: {
                     </div>
                 </div>
             </div>
-        </motion.div>
+        </div>
     );
 });
 
 AppCard.displayName = 'AppCard';
 
 // Add this hook
-const useDebounce = (value: string, delay: number) => {
-    const [debouncedValue, setDebouncedValue] = useState(value);
-    useEffect(() => {
-        const handler = setTimeout(() => setDebouncedValue(value), delay);
-        return () => clearTimeout(handler);
-    }, [value, delay]);
-    return debouncedValue;
-};
 
 export const AppStore = ({ setActiveApp }: AppStoreProps) => {
     const [apps, setApps] = useState<App[]>(initialApps)
@@ -408,15 +399,14 @@ export const AppStore = ({ setActiveApp }: AppStoreProps) => {
                             className="flex flex-col lg:flex-col  space-y-6"
                         >
                             <div className="flex justify-between items-center">
-                                <motion.h2
+                                <h2
                                     className="sm:block hidden text-2xl font-semibold text-white/90"
-                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                 >
                                     App Store
-                                </motion.h2>
+                                </h2>
                                 <div className="flex gap-2 flex-col-1 sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
                                     <div className="relative w-full sm:w-auto">
-                                        <div className={`absolute inset-y-0 left-3 flex items-center pointer-events-none transition-opacity duration-300 ${isSearchFocused ? 'opacity-0' : 'opacity-100'}`}>
+                                        <div className={`absolute inset-y-0 left-3 flex items-center pointer-events-none -opacity  ${isSearchFocused ? 'opacity-0' : 'opacity-100'}`}>
                                             <FiSearch className="h-4 w-4 text-white/50" />
                                         </div>
                                         <input
@@ -498,7 +488,7 @@ export const AppStore = ({ setActiveApp }: AppStoreProps) => {
                                         ? 'grid grid-cols-1 md:grid-cols-2 gap-4'
                                         : 'flex flex-col space-y-3'
                                     } 
-                                    overflow-y-auto max-h-[500px] pr-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent`}
+                                    overflow-y-auto max-h-[500px] scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent`}
                                 >
                                     {memoizedFilteredApps.map((app) => (
                                         <AppCard

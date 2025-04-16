@@ -20,20 +20,15 @@ export const PasswordValidation = ({ onSuccess, isNewPassword }: PasswordValidat
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
-    const [strength, setStrength] = useState<PasswordStrength>({ score: 0, message: "", color: "" });
+    // Unused variables intentionally prefixed with underscore
+    const [_strength, _setStrength] = useState<PasswordStrength>({ score: 0, message: "", color: "" });
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [_confirmPassword, _setConfirmPassword] = useState("");
     const [isValidating, setIsValidating] = useState(false);
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newPassword = e.target.value;
         setPassword(newPassword);
-        setError(null);
-        setSuccess(null);
-    };
-
-    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setConfirmPassword(e.target.value);
         setError(null);
         setSuccess(null);
     };
@@ -177,7 +172,7 @@ export const PasswordValidation = ({ onSuccess, isNewPassword }: PasswordValidat
                                         setShowRecovery(true);
                                         setTimeout(() => {
                                             setPassword(storedPass);
-                                            setConfirmPassword(storedPass);
+                                            _setConfirmPassword(storedPass);
                                         }, 300);
                                     }
                                 }}
@@ -194,9 +189,6 @@ export const PasswordValidation = ({ onSuccess, isNewPassword }: PasswordValidat
                             </button>
                         </motion.div>
                     )}
-
-
-
                     <button
                         onClick={handleSubmit}
                         disabled={isValidating}
@@ -215,11 +207,10 @@ export const PasswordValidation = ({ onSuccess, isNewPassword }: PasswordValidat
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="mt-4 p-4 bg-purple-500/5 rounded-2xl border border-purple-400/30 relative overflow-hidden"
+                            className="p-1 bg-purple-500/5 rounded-2xl border border-purple-400/30 relative overflow-hidden"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-purple-400/5 to-purple-500/10 animate-pulse" />
+                            <div className="absolute inset-0  animate-pulse" />
                             <div className="relative z-10">
-                                <p className="text-sm text-white/80 mb-2">Your current password:</p>
                                 <div className="bg-purple-950/50 p-3 rounded-lg border border-purple-400/20 backdrop-blur-sm">
                                     <code className="text-purple-300 font-mono text-lg tracking-wide">
                                         {localStorage.getItem('password')}
@@ -229,7 +220,6 @@ export const PasswordValidation = ({ onSuccess, isNewPassword }: PasswordValidat
                             <div className="absolute -inset-1 bg-gradient-to-r from-purple-500/20 via-fuchsia-500/20 to-purple-500/20 blur-xl opacity-50" />
                         </motion.div>
                     )}
-
                 </div>
             </motion.div>
         </motion.div>

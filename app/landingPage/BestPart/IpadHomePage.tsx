@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Notification } from './notification';
 import { Weather } from './weather';
 import { Application } from './application';
 
-export const IpadHomePage = () => {
+export const IpadHomePage = memo(() => {
     const [currentTime, setCurrentTime] = useState(new Date());
     const [open, setOpen] = useState(false);
 
@@ -108,4 +108,4 @@ export const IpadHomePage = () => {
 
         </motion.div>
     );
-};
+})

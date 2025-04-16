@@ -1,10 +1,10 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { X, Eye, EyeOff, Check, AlertCircle } from "lucide-react";
+import { X,  Check, AlertCircle } from "lucide-react";
 
 interface PasswordProps {
-    setActiveApp: (app: 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | 'Password' | null) => void;
+    setActiveApp: (app: 'Settings' | 'Messages' | 'App Store' | 'Photos' | 'Flappy Bird' | 'Notes' | 'Password' | 'Wallpaper' | null) => void;
 }
 
 interface PasswordStrength {
@@ -37,7 +37,8 @@ export const Password = ({ setActiveApp }: PasswordProps) => {
     const [hasPassword, setHasPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
-    const [showPassword, setShowPassword] = useState(false);
+    const [password, setPassword] = useState('');
+    const [showPassword, _setShowPassword] = useState(false);
     const [strength, setStrength] = useState<PasswordStrength>({ score: 0, message: "", color: "" });
     const [currentPassword, setCurrentPassword] = useState("");
     const firstPassword = useRef<HTMLInputElement>(null);
