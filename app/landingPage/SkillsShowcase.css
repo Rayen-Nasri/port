@@ -32,7 +32,6 @@
 .skills-showcase {
   position: relative;
   padding: 8rem 0 6rem;
-  overflow: hidden;
   color: white;
   min-height: 90vh;
   display: flex;
@@ -94,7 +93,6 @@
   font-weight: 500;
   transition: var(--transition-fast);
   position: relative;
-  overflow: hidden;
 }
 
 .category-tab::before {
@@ -222,7 +220,6 @@
   backdrop-filter: blur(12px);
   transition: var(--transition-normal);
   position: relative;
-  overflow: hidden;
   height: 100%;
   min-height: 140px;
   display: flex;
@@ -354,7 +351,6 @@
   height: 10px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  overflow: hidden;
   position: relative;
   z-index: 2;
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -457,7 +453,6 @@
   height: 100%;
   pointer-events: none;
   z-index: 1;
-  overflow: hidden;
   opacity: 0.8;
 }
 
@@ -627,6 +622,29 @@
     grid-template-columns: repeat(auto-fill, minmax(var(--grid-min-width-medium), 1fr));
     gap: var(--grid-gap-medium);
     padding: 1rem;
+    overflow-y: hidden;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-padding: 1rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--bg-dark);
+  }
+  
+  .skills-grid::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .skills-grid::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+    border-radius: 10px;
+  }
+  
+  .skills-grid::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
   }
 }
 
@@ -646,8 +664,19 @@
   }
   
   .skills-grid {
-    grid-template-columns: repeat(auto-fill, minmax(var(--grid-min-width-small), 1fr));
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
     gap: var(--grid-gap-small);
+    padding: 0.5rem 1rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .skill-item {
+    scroll-snap-align: start;
+    min-width: 240px;
+    flex-shrink: 0;
   }
   
   .skill-item {

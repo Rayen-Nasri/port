@@ -21,7 +21,12 @@ const wallpapers = [
 type WallpaperComponent = typeof wallpapers[number]['component'];
 
 export const IpadLoadingScreen = ({ children }: { children: React.ReactNode }) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return !sessionStorage.getItem('ipadLoadingScreenShown');
+    }
+    return true;
+  });
   const [existPass, setExistPass] = useState(false);
   const [passwordValidated, setPasswordValidated] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState<WallpaperComponent>(() => {
@@ -34,6 +39,8 @@ export const IpadLoadingScreen = ({ children }: { children: React.ReactNode }) =
   });
 
   useEffect(() => {
+    if (!loading) return;
+    
     if (typeof window !== 'undefined') {
       if (localStorage.getItem("hasPassword") === "true") {
         setExistPass(true);
@@ -42,12 +49,13 @@ export const IpadLoadingScreen = ({ children }: { children: React.ReactNode }) =
 
     const timer = setTimeout(() => {
       setLoading(false);
+      sessionStorage.setItem('ipadLoadingScreenShown', 'true');
     }, 5000);
 
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
     const handleStorageChange = () => {

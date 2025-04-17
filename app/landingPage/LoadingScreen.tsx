@@ -25,7 +25,12 @@ const wallpapers = [
 type WallpaperComponent = typeof wallpapers[number]['component'];
 
 export const LoadingScreen = ({ children }: LoadingScreenProps) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return !sessionStorage.getItem('loadingScreenShown');
+    }
+    return true;
+  });
   const [selectedComponent, setSelectedComponent] = useState<WallpaperComponent>(() => {
     if (typeof window !== 'undefined') {
       const savedId = localStorage.getItem('selectedLoadingScreen');
@@ -36,12 +41,15 @@ export const LoadingScreen = ({ children }: LoadingScreenProps) => {
   });
 
   useEffect(() => {
+    if (!loading) return;
+    
     const timer = setTimeout(() => {
       setLoading(false);
+      sessionStorage.setItem('loadingScreenShown', 'true');
     }, 6000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
     const handleStorageChange = () => {

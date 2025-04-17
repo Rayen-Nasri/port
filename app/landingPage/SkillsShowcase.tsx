@@ -100,27 +100,8 @@ export const SkillsShowcase = () => {
 
 
     return (
-        <section className="skills-showcase" ref={containerRef}>
-            <div className="skills-header">
-                <motion.h2 
-                    initial="hidden"
-                    animate={isInView ? "visible" : "hidden"}
-                    variants={headerAnimations}
-                    transition={{ duration: 0.6 }}
-                    className="skills-title"
-                >
-                    My <span className="text-gradient">Skills</span> & Expertise
-                </motion.h2>
-                <motion.p 
-                    initial="hidden"
-                    animate={isInView ? "visible" : "hidden"}
-                    variants={subtitleAnimations}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="skills-subtitle"
-                >
-                    Crafting digital experiences with cutting-edge technologies
-                </motion.p>
-            </div>
+        <section className="skills-showcase w-[100vw] h-[100vh]" ref={containerRef}>
+
 
             <div className="skills-category-tabs">
                 {skillCategories.map((category, index) => (
@@ -145,11 +126,11 @@ export const SkillsShowcase = () => {
                     transition={{ duration: 0.8, delay: 0.3 }}
                 >
 
-                <div className="skills-grid">
+                <div className="skills-grid md:overflow-x-auto sm:overflow-x-auto md:flex sm:flex md:flex-nowrap sm:flex-nowrap md:grid-none sm:grid-none">
                     {activeSkills.map((skill, index) => (
                         <motion.div 
                             key={skill.name}
-                            className="skill-item"
+                            className="skill-item md:min-w-[260px] sm:min-w-[240px] md:flex-shrink-0 sm:flex-shrink-0"
                             initial={{ opacity: 0, scale: 0.8, y: 20 }}
                             animate={isInView ? { 
                                 opacity: 1, 

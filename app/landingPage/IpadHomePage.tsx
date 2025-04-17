@@ -2,9 +2,9 @@
 
 import { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Notification } from './notification';
-import { Weather } from './weather';
-import { Application } from './application';
+import { Notification } from './BestPart/notification';
+import { Weather } from './BestPart/weather';
+import { Application } from './BestPart/application';
 
 export const IpadHomePage = memo(() => {
     const [currentTime, setCurrentTime] = useState(new Date());
@@ -18,6 +18,7 @@ export const IpadHomePage = memo(() => {
     }, []);
 
     return (
+
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
