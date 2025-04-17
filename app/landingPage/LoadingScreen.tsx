@@ -46,7 +46,7 @@ export const LoadingScreen = ({ children }: LoadingScreenProps) => {
     const timer = setTimeout(() => {
       setLoading(false);
       sessionStorage.setItem('loadingScreenShown', 'true');
-    }, 6000);
+    }, 4000);
 
     return () => clearTimeout(timer);
   }, [loading]);

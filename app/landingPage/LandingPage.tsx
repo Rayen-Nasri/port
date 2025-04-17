@@ -2,6 +2,7 @@
 import dynamic from 'next/dynamic';
 import './SkillsShowcase.css';
 import { Spotlight } from '@/components/ui/spotlight-new';
+import { LoadingScreen } from './LoadingScreen';
 
 
 
@@ -16,7 +17,10 @@ export const LandingPage = () => {
             <div className="absolute h-screen w-screen">
                 <Spotlight />
             </div>
-            <ScrollSystem />
+            <LoadingScreen>
+                <ScrollSystem />
+
+            </LoadingScreen>
         </>
     );
 };
