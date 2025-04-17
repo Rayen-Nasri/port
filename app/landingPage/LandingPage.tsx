@@ -2,13 +2,14 @@
 import dynamic from 'next/dynamic';
 import './SkillsShowcase.css';
 import { Spotlight } from '@/components/ui/spotlight-new';
-import { LoadingScreen } from './LoadingScreen';
 
 
-
+const LoadingScreen = dynamic(() => import('./LoadingScreen').then(mod => mod.LoadingScreen), {
+    ssr: false,
+});
 
 const ScrollSystem = dynamic(() => import('./ScrollSystem').then(mod => mod.ScrollSystem), {
-    ssr: true,
+    ssr: false,
 });
 
 export const LandingPage = () => {
@@ -19,7 +20,6 @@ export const LandingPage = () => {
             </div>
             <LoadingScreen>
                 <ScrollSystem />
-
             </LoadingScreen>
         </>
     );

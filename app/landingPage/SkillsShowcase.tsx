@@ -145,8 +145,8 @@ export const SkillsShowcase = () => {
                             } : {}}
                             whileHover={{ 
                                 y: -8, 
-                                boxShadow: '0 15px 35px rgba(129, 88, 201, 0.4)',
-                                scale: 1.03
+                                boxShadow: '0 5px 10px rgba(129, 88, 201, 0.4)',
+                                scale: 1.01
                             }}
                         >
                             <div className="skill-item-glow"></div>
